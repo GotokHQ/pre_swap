@@ -4,7 +4,7 @@ import bs58 from 'bs58';
 import { Stamp } from './accounts';
 
 export class PreSwapProgram extends Program {
-  static readonly PUBKEY = new PublicKey('C22H1SCARxMdgx8XgbP4ZSfTEa7RPKzncREgE6f54yag');
+  static readonly PUBKEY = new PublicKey('3p2ciATj9kchGotTBzMubgK5E46CUfrhSF8MLzxjHxwE');
 
   static findStampAccount(reference: string): [PublicKey, number] {
     return PublicKey.findProgramAddressSync(
