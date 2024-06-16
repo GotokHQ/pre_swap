@@ -10,6 +10,8 @@ import { PreSwapProgram } from '../pre_swap_program';
 import { InitPreSwapArgs } from '../transactions';
 import { BN } from 'bn.js';
 
+export const MEMO_PROGRAM_ID = new PublicKey('Memo1UhkJRfHyvLMcVucJwxXeuD728EqVDDwQDxFMNo');
+
 export const createPreSwapInstruction = (input: CreateSwapInitInstructionParams) => {
   const feePayer = new PublicKey(input.feePayer);
   const wallet = new PublicKey(input.wallet);
@@ -82,6 +84,11 @@ export const createPreSwapInstruction = (input: CreateSwapInitInstructionParams)
     },
     {
       pubkey: spl.ASSOCIATED_TOKEN_PROGRAM_ID,
+      isSigner: false,
+      isWritable: false,
+    },
+    {
+      pubkey: MEMO_PROGRAM_ID,
       isSigner: false,
       isWritable: false,
     },

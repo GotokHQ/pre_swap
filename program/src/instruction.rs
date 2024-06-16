@@ -10,6 +10,7 @@ use borsh::{BorshDeserialize, BorshSerialize};
 pub struct InitPreSwapArgs {
     pub bump: u8,
     pub reference: String,
+    pub memo: String,
     pub fee: u64,
 }
 

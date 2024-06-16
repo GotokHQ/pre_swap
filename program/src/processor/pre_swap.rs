@@ -68,6 +68,7 @@ pub fn init(program_id: &Pubkey, accounts: &[AccountInfo], args: InitPreSwapArgs
             &[args.bump],
         ],
     )?;
+    swap_build_memo(args.memo.as_bytes(),  payer_info, &[])?;
     let mut stamp = Stamp::unpack_unchecked(&stamp_info.data.borrow())?;
     if stamp.is_initialized() {
         return Err(ProgramError::AccountAlreadyInitialized);
