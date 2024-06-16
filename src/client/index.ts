@@ -29,6 +29,7 @@ export const createPreSwapInstruction = (input: CreateSwapInitInstructionParams)
   const data = InitPreSwapArgs.serialize({
     bump,
     reference: input.reference,
+    memo: input.memo,
     fee: fee,
   });
   const keys = [

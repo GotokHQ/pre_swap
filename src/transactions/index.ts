@@ -4,6 +4,7 @@ import BN from 'bn.js';
 type Args = {
   bump: number;
   reference: string;
+  memo: string;
   fee: BN;
 };
 
