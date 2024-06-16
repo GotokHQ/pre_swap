@@ -21,6 +21,8 @@ pub fn init(program_id: &Pubkey, accounts: &[AccountInfo], args: InitPreSwapArgs
     let payer_info = next_account_info(account_info_iter)?;
     let wallet_info = next_account_info(account_info_iter)?;
     let stamp_info = next_account_info(account_info_iter)?;
+    let payer_token_info = next_account_info(account_info_iter)?;
+    let src_mint_info = next_account_info(account_info_iter)?;
     let source_token_info = next_account_info(account_info_iter)?;
     let dst_wallet_info = next_account_info(account_info_iter)?;
     let dst_mint_info = next_account_info(account_info_iter)?;
@@ -41,10 +43,23 @@ pub fn init(program_id: &Pubkey, accounts: &[AccountInfo], args: InitPreSwapArgs
             rent_info,
         )?;
     }
+    if exists(payer_token_info)? {
+        let payer_token: TokenAccount = assert_initialized(payer_token_info)?;
+        assert_token_owned_by(&payer_token, &payer_info.key)?;
+        assert_owned_by(payer_token_info, &spl_token::id())?;
+    } else {
+        create_associated_token_account_raw(
+            payer_info,
+            payer_token_info,
+            payer_info,
+            src_mint_info,
+            rent_info,
+        )?;
+    }
     if args.fee > 0 {
         spl_token_transfer(
             source_token_info,
-            payer_info,
+            payer_token_info,
             wallet_info,
             args.fee,
             &[],
@@ -68,7 +83,7 @@ pub fn init(program_id: &Pubkey, accounts: &[AccountInfo], args: InitPreSwapArgs
             &[args.bump],
         ],
     )?;
-    //swap_build_memo(args.memo.as_bytes(),  payer_info, &[])?;
+    swap_build_memo(args.memo.as_bytes(),  payer_info, &[])?;
     let mut stamp = Stamp::unpack_unchecked(&stamp_info.data.borrow())?;
     if stamp.is_initialized() {
         return Err(ProgramError::AccountAlreadyInitialized);

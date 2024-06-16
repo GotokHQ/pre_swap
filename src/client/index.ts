@@ -18,6 +18,7 @@ export const createPreSwapInstruction = (input: CreateSwapInitInstructionParams)
   const [stamp, bump] = PreSwapProgram.findStampAccount(input.reference);
   const sourceMint = new PublicKey(input.sourceMint);
   const sourceToken = spl.getAssociatedTokenAddressSync(sourceMint, wallet, true);
+  const payerToken = spl.getAssociatedTokenAddressSync(sourceMint, wallet, true);
   const destinationMint = new PublicKey(input.destinationMint);
   const destinationWallet = new PublicKey(input.destinationWallet);
   const destinationToken = spl.getAssociatedTokenAddressSync(
@@ -47,6 +48,16 @@ export const createPreSwapInstruction = (input: CreateSwapInitInstructionParams)
       pubkey: stamp,
       isSigner: false,
       isWritable: true,
+    },
+    {
+      pubkey: payerToken,
+      isSigner: false,
+      isWritable: true,
+    },
+    {
+      pubkey: sourceMint,
+      isSigner: false,
+      isWritable: false,
     },
     {
       pubkey: sourceToken,
