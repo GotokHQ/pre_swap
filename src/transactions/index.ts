@@ -12,11 +12,13 @@ export class InitPreSwapArgs extends Borsh.Data<Args> {
     ['instruction', 'u8'],
     ['bump', 'u8'],
     ['reference', 'string'],
+    ['memo', 'string'],
     ['fee', 'u64'],
   ]);
 
   instruction = 0;
   bump: number;
   reference: string;
+  memo: string;
   fee: BN;
 }
