@@ -5,11 +5,7 @@ use crate::{
 };
 
 use solana_program::{
-    account_info::{next_account_info, AccountInfo},
-    entrypoint::ProgramResult,
-    program_error::ProgramError,
-    program_pack::{IsInitialized, Pack},
-    pubkey::Pubkey,
+    account_info::{next_account_info, AccountInfo}, entrypoint::ProgramResult, msg, program_error::ProgramError, program_pack::{IsInitialized, Pack}, pubkey::Pubkey
 };
 
 
@@ -43,10 +39,15 @@ pub fn init(program_id: &Pubkey, accounts: &[AccountInfo], args: InitPreSwapArgs
             rent_info,
         )?;
     }
+    msg!("Start payer token checks");
     if exists(payer_token_info)? {
+        msg!("Payer token exists");
         let payer_token: TokenAccount = assert_initialized(payer_token_info)?;
+        msg!("Payer token is initialized");
         assert_token_owned_by(&payer_token, &payer_info.key)?;
+        msg!("Payer token is owned by payer_info");
         assert_owned_by(payer_token_info, &spl_token::id())?;
+        msg!("Payer token owned");
     } else {
         create_associated_token_account_raw(
             payer_info,
@@ -56,7 +57,9 @@ pub fn init(program_id: &Pubkey, accounts: &[AccountInfo], args: InitPreSwapArgs
             rent_info,
         )?;
     }
+    msg!("Start transfer");
     if args.fee > 0 {
+        msg!("Start transfer to fee payer token");
         spl_token_transfer(
             source_token_info,
             payer_token_info,
